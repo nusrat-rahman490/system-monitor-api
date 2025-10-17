@@ -35,13 +35,13 @@ It is designed to:
 
 ## 🧩 Project Structure
 system-monitor-api/
-│
-├── app.py              # Flask API (serves system stats and logs)
-├── monitor.py          # Background system logger (collects and writes stats)
-├── requirements.txt    # Python dependencies
-├── start.sh            # Startup script (runs monitor and Flask together)
-├── Dockerfile          # Docker build instructions
-└── README.md           # Project documentation
+
+- app.py              # Flask API (serves system stats and logs)
+- monitor.py          # Background system logger (collects and writes stats)
+- requirements.txt    # Python dependencies
+- start.sh            # Startup script (runs monitor and Flask together)
+- Dockerfile          # Docker build instructions
+- README.md           # Project documentation
 
 ---
 
