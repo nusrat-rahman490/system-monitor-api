@@ -4,10 +4,15 @@ import time
 import os
 
 # Log file path
-LOG_FILE = os.environ.get("LOG_FILE", "/app/system_log.txt")
+LOG_FILE = os.environ.get("LOG_FILE", "system_log.txt")
+
+# Ensure file exists
+os.makedirs(os.path.dirname(LOG_FILE) if os.path.dirname(LOG_FILE) else '.', exist_ok=True)
+open(LOG_FILE, 'a').close()  # create empty file if not exists
+
 
 def get_stats():
-    """Collect CPU, memory, and disk usage."""
+    """Collect CPU, memory, disk usage, and timestamp."""
     cpu = psutil.cpu_percent(interval=1)
     memory = psutil.virtual_memory().percent
     disk = psutil.disk_usage('/').percent
@@ -20,11 +25,11 @@ def get_stats():
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
     }
 
+
 # Continuous logging
 while True:
     data = get_stats()
-    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
     with open(LOG_FILE, "a") as f:
         f.write(json.dumps(data) + "\n")
     print("Logged:", data)
-    time.sleep(5)  # Log every 5 seconds
+    time.sleep(5)  # every 5 seconds
