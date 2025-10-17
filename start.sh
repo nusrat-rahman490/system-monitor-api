@@ -1,5 +1,6 @@
-#!/bin/bash
-# Start monitor.py in the background
+
+# Start monitor.py in background
 python3 monitor.py &
-# Start Flask
-flask run --host=0.0.0.0
+
+# Start Flask on Render port
+flask run --host=0.0.0.0 --port=$PORT
