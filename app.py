@@ -1,12 +1,14 @@
-import os, json, time
+import os
+import json
+import time
 import psutil
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-# LOG_FILE: container default /app/system_log.txt,
-# overridden by environment if set (useful for local testing)
-LOG_FILE = os.environ.get("LOG_FILE", "/app/system_log.txt")
+# Use environment variable if set (Render-friendly)
+LOG_FILE = os.environ.get("LOG_FILE", "system_log.txt")
+
 
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
@@ -22,22 +24,27 @@ def get_stats():
     }
     return jsonify(stats)
 
+
 @app.route('/api/logs', methods=['GET'])
 def get_logs():
     logs = []
     try:
         with open(LOG_FILE, "r") as f:
             for line in f:
-                line=line.strip()
+                line = line.strip()
                 if line:
                     logs.append(json.loads(line))
     except FileNotFoundError:
         return jsonify({"error": "system_log.txt not found", "path": LOG_FILE}), 404
     return jsonify(logs)
 
+
 @app.route('/')
 def home():
     return "System Monitor API — use /api/stats and /api/logs"
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    # Use Render port if available, otherwise default 5000
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
